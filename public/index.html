@@ -1,291 +1,78 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <meta name="theme-color" content="#ffffff">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prep Master</title>
-
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles.css" />
 </head>
-
 <body>
-
-  <!-- HEADER -->
   <header class="topbar">
-
     <div class="brand">
-      <img
-        src="logo.png"
-        alt="Prep Master Logo"
-        onerror="this.style.display='none'"
-      >
-
+      <div class="logo">PM</div>
       <strong>Prep Master</strong>
     </div>
-
-    <button
-      id="menuBtn"
-      class="icon-btn"
-      aria-label="Open menu"
-    >
-      ⋮
-    </button>
-
-    <!-- THREE DOT MENU -->
+    <button id="menuBtn" class="menu-btn" aria-label="Menu">⋮</button>
     <div id="menu" class="menu hidden">
-
-      <a
-        href="https://t.me/prepmaster0"
-        target="_blank"
-        rel="noopener"
-      >
-        ✈ Telegram
-      </a>
-
-      <button data-page="account">
-        👤 Account
-      </button>
-
-      <button data-page="batches">
-        📚 Batches
-      </button>
-
-      <button data-page="mybatches">
-        📖 My Batches
-      </button>
-
+      <a href="https://t.me/prepmaster0" target="_blank" rel="noopener">Join Telegram</a>
+      <a href="https://t.me/Subhanali011" target="_blank" rel="noopener">Contact Owner</a>
     </div>
-
   </header>
 
-
   <main>
-
-    <!-- BATCHES PAGE -->
     <section id="batchesPage" class="page">
-
-      <input
-        id="search"
-        class="search"
-        type="search"
-        placeholder="Search batches..."
-      >
-
-      <div id="batchList" class="batch-list">
-
-        <p class="muted">
-          Loading batches...
-        </p>
-
+      <h1>Batches</h1>
+      <input id="batchSearch" class="search" placeholder="Search batches..." />
+      <div id="batchList" class="batch-grid">
+        <p>Loading batches...</p>
       </div>
-
     </section>
 
-
-    <!-- MY BATCHES PAGE -->
-    <section
-      id="mybatchesPage"
-      class="page hidden"
-    >
-
-      <h2>My Batches</h2>
-
-      <div
-        id="myBatchList"
-        class="batch-list"
-      ></div>
-
+    <section id="myBatchesPage" class="page hidden">
+      <h1>My Batches</h1>
+      <div id="myBatchList" class="batch-grid"></div>
     </section>
 
-
-    <!-- COMMUNITY PAGE -->
-    <section
-      id="communityPage"
-      class="page hidden"
-    >
-
-      <h2>Community</h2>
-
-      <p class="muted">
-        Students ke saath study discussion karein.
-      </p>
-
-      <div class="chat-panel">
-
-        <div
-          id="messages"
-          class="messages"
-        ></div>
-
-        <form
-          id="chatForm"
-          class="chat-form"
-        >
-
-          <input
-            id="chatInput"
-            maxlength="1000"
-            placeholder="Write a message..."
-            autocomplete="off"
-            required
-          >
-
-          <button
-            class="primary"
-            type="submit"
-          >
-            Send
-          </button>
-
-        </form>
-
-      </div>
-
-    </section>
-
-
-    <!-- AI DOUBTS PAGE -->
-    <section
-      id="aiPage"
-      class="page hidden"
-    >
-
-      <h2>AI Doubts Support</h2>
-
-      <p class="muted">
-        Apna study-related doubt poochhein.
-      </p>
-
-      <div
-        id="aiMessages"
-        class="messages ai-messages"
-      >
-
-        <div class="bubble bot">
-          Namaste! Apna study doubt poochho.
-        </div>
-
-      </div>
-
-      <form
-        id="aiForm"
-        class="chat-form"
-      >
-
-        <input
-          id="aiInput"
-          placeholder="Ask your doubt..."
-          autocomplete="off"
-          required
-        >
-
-        <button
-          class="primary"
-          type="submit"
-        >
-          Send
-        </button>
-
+    <section id="communityPage" class="page hidden">
+      <h1>Community</h1>
+      <p class="muted">Be respectful. Do not share personal information.</p>
+      <div id="chatMessages" class="chat-messages"></div>
+      <form id="chatForm" class="chat-form">
+        <input id="chatInput" maxlength="1000" placeholder="Write a message..." required />
+        <button type="submit">Send</button>
       </form>
-
+      <p id="chatStatus" class="muted"></p>
     </section>
 
-
-    <!-- ACCOUNT PAGE -->
-    <section
-      id="accountPage"
-      class="page hidden"
-    >
-
-      <h2>Account</h2>
-
-      <div class="account-card">
-
-        <label for="username">
-          Your Username
-        </label>
-
-        <input
-          id="username"
-          maxlength="24"
-          placeholder="Enter username"
-        >
-
-        <button
-          id="saveAccount"
-          class="primary"
-        >
-          Save Username
-        </button>
-
-        <p
-          id="accountStatus"
-          class="muted"
-        >
-          Username community messages ke upar dikhega.
-        </p>
-
+    <section id="aiPage" class="page hidden">
+      <h1>AI Doubts Support</h1>
+      <div id="aiMessages" class="ai-messages">
+        <div class="bubble bot">Hello! Apna study question poochho.</div>
       </div>
-
+      <form id="aiForm" class="chat-form">
+        <input id="aiInput" maxlength="4000" placeholder="Ask your doubt..." required />
+        <button type="submit">Send</button>
+      </form>
     </section>
 
+    <section id="accountPage" class="page hidden">
+      <h1>Account</h1>
+      <label for="username">Your community username</label>
+      <input id="username" class="search" maxlength="24" placeholder="Enter username" />
+      <button id="saveUsername" class="primary-btn">Save username</button>
+      <p id="accountStatus" class="muted"></p>
+    </section>
   </main>
 
-
-  <!-- BOTTOM NAVIGATION -->
   <nav class="bottom-nav">
-
-    <button data-page="community">
-
-      <span>💬</span>
-
-      Community
-
-    </button>
-
-
-    <button data-page="mybatches">
-
-      <span>📖</span>
-
-      My Batches
-
-    </button>
-
-
-    <button
-      data-page="batches"
-      class="active"
-    >
-
-      <span>📚</span>
-
-      Batches
-
-    </button>
-
-
-    <button data-page="ai">
-
-      <span>🤖</span>
-
-      AI Doubts
-
-    </button>
-
+    <button data-page="accountPage">Account</button>
+    <button data-page="communityPage">Community</button>
+    <button data-page="batchesPage" class="active">Batches</button>
+    <button data-page="myBatchesPage">My Batches</button>
+    <button data-page="aiPage">AI Doubts</button>
   </nav>
 
-
-  <!-- JAVASCRIPT -->
-  <script src="/socket.io/socket.io.js"></script>
-
-  <script src="app.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/app.js"></script>
 </body>
-
 </html>
