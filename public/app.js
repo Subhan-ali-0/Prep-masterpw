@@ -1,551 +1,276 @@
+let supabaseClient = null;
+let allBatches = [];
 
-/* =========================================
-   PREP MASTER - MAIN JAVASCRIPT
-========================================= */
+const $ = (id) => document.getElementById(id);
 
-const $ = selector => document.querySelector(selector);
+function showPage(pageId) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("hidden", page.id !== pageId);
+  });
 
-let batches = [];
+  document.querySelectorAll(".bottom-nav button").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === pageId);
+  });
+}
 
-const enrolledKey = "pm_enrolled_v1";
-const usernameKey = "pm_username";
+document.querySelectorAll(".bottom-nav button").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.page));
+});
 
-/* =========================================
-   LOCAL STORAGE
-========================================= */
+$("menuBtn").addEventListener("click", () => {
+  $("menu").classList.toggle("hidden");
+});
 
-function getEnrolled() {
+document.addEventListener("click", (event) => {
+  if (!event.target.closest("#menu") && !event.target.closest("#menuBtn")) {
+    $("menu").classList.add("hidden");
+  }
+});
+
+function getUsername() {
+  return localStorage.getItem("pm_username") || "";
+}
+
+$("username").value = getUsername();
+
+$("saveUsername").addEventListener("click", () => {
+  const name = $("username").value.trim().slice(0, 24);
+
+  if (!name) {
+    $("accountStatus").textContent = "Username enter karo.";
+    return;
+  }
+
+  localStorage.setItem("pm_username", name);
+  $("accountStatus").textContent = "Username saved.";
+});
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function batchCard(batch, enrolled = false) {
+  const image = batch.image
+    ? `<img src="${escapeHtml(batch.image)}" alt="" loading="lazy">`
+    : `<div style="height:145px;background:#f1f1f1"></div>`;
+
+  return `
+    <article class="batch-card">
+      ${image}
+      <div class="batch-info">
+        <h3>${escapeHtml(batch.title)}</h3>
+        <p>${escapeHtml(batch.description || "Prep Master batch")}</p>
+        <div class="actions">
+          <button data-study="${escapeHtml(batch.id)}">Study</button>
+          <button class="secondary" data-enroll="${escapeHtml(batch.id)}">
+            ${enrolled ? "Added" : "Enroll"}
+          </button>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderBatches(list = allBatches) {
+  $("batchList").innerHTML = list.length
+    ? list.map(batch => batchCard(
+        batch,
+        getMyBatches().some(item => item.id === batch.id)
+      )).join("")
+    : "<p>No batches found.</p>";
+}
+
+function getMyBatches() {
   try {
-    return JSON.parse(
-      localStorage.getItem(enrolledKey) || "[]"
-    );
+    return JSON.parse(localStorage.getItem("pm_enrolled") || "[]");
   } catch {
     return [];
   }
 }
 
-function saveEnrolled(list) {
-  localStorage.setItem(
-    enrolledKey,
-    JSON.stringify(list)
-  );
-}
-
-function getUsername() {
-  return localStorage.getItem(usernameKey) || "Student";
-}
-
-/* =========================================
-   HTML SECURITY
-========================================= */
-
-function safe(value) {
-  return String(value ?? "").replace(
-    /[&<>"']/g,
-    char => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[char]
-  );
-}
-
-/* =========================================
-   PAGE NAVIGATION
-========================================= */
-
-function showPage(name) {
-
-  document
-    .querySelectorAll(".page")
-    .forEach(page => {
-      page.classList.add("hidden");
-    });
-
-  const page = $(`#${name}Page`);
-
-  if (page) {
-    page.classList.remove("hidden");
-  }
-
-  document
-    .querySelectorAll(".bottom-nav button")
-    .forEach(button => {
-      button.classList.toggle(
-        "active",
-        button.dataset.page === name
-      );
-    });
-
-  $("#menu").classList.add("hidden");
-
-  if (name === "mybatches") {
-    renderMyBatches();
-  }
-}
-
-document
-  .querySelectorAll("[data-page]")
-  .forEach(button => {
-
-    button.addEventListener("click", () => {
-      showPage(button.dataset.page);
-    });
-
-  });
-
-/* =========================================
-   THREE DOT MENU
-========================================= */
-
-$("#menuBtn").addEventListener("click", () => {
-
-  $("#menu").classList.toggle("hidden");
-
-});
-
-document.addEventListener("click", event => {
-
-  if (
-    !event.target.closest("#menu") &&
-    !event.target.closest("#menuBtn")
-  ) {
-    $("#menu").classList.add("hidden");
-  }
-
-});
-
-/* =========================================
-   BATCH CARD
-========================================= */
-
-function cardHTML(batch) {
-
-  const enrolled = getEnrolled().includes(
-    String(batch.id)
-  );
-
-  const image = batch.image
-    ? `
-      <img
-        class="batch-image"
-        src="${safe(batch.image)}"
-        alt="${safe(batch.title)}"
-        loading="lazy"
-        onerror="this.style.display='none'"
-      >
-    `
-    : `
-      <div class="batch-image placeholder">
-        Prep Master
-      </div>
-    `;
-
-  return `
-    <article class="batch-card">
-
-      ${image}
-
-      <div class="batch-info">
-
-        <h3>
-          ${safe(batch.title)}
-        </h3>
-
-        ${
-          batch.description
-            ? `<p class="muted">${safe(batch.description)}</p>`
-            : ""
-        }
-
-        <div class="actions">
-
-          <button
-            data-study="${safe(batch.id)}"
-          >
-            Study
-          </button>
-
-          <button
-            class="enroll"
-            data-enroll="${safe(batch.id)}"
-          >
-            ${enrolled ? "Enrolled ✓" : "Enroll"}
-          </button>
-
-        </div>
-
-      </div>
-
-    </article>
-  `;
-}
-
-/* =========================================
-   RENDER BATCHES
-========================================= */
-
-function renderList(target, list) {
-
-  const container = $(target);
-
-  if (!list.length) {
-
-    container.innerHTML = `
-      <p class="muted">
-        Abhi koi batch nahi mila.
-      </p>
-    `;
-
-    return;
-  }
-
-  container.innerHTML = list
-    .map(batch => cardHTML(batch))
-    .join("");
-
-}
-
-function renderBatches() {
-
-  const query = $("#search")
-    .value
-    .trim()
-    .toLowerCase();
-
-  const filtered = batches.filter(batch => {
-
-    return batch.title
-      .toLowerCase()
-      .includes(query);
-
-  });
-
-  renderList("#batchList", filtered);
-
-}
-
 function renderMyBatches() {
-
-  const enrolled = getEnrolled();
-
-  const myBatches = batches.filter(batch => {
-
-    return enrolled.includes(String(batch.id));
-
-  });
-
-  renderList("#myBatchList", myBatches);
-
+  const batches = getMyBatches();
+  $("myBatchList").innerHTML = batches.length
+    ? batches.map(batch => batchCard(batch, true)).join("")
+    : "<p>Abhi koi batch enroll nahi kiya.</p>";
 }
 
-/* =========================================
-   BATCH BUTTONS
-========================================= */
-
 document.addEventListener("click", event => {
+  const studyId = event.target.dataset.study;
+  const enrollId = event.target.dataset.enroll;
 
-  const study = event.target.closest("[data-study]");
+  if (studyId) {
+    window.location.href = `/api/study?id=${encodeURIComponent(studyId)}`;
+  }
 
-  const enroll = event.target.closest("[data-enroll]");
+  if (enrollId) {
+    const batch = allBatches.find(item => item.id === enrollId);
+    if (!batch) return;
 
-  /* STUDY BUTTON */
+    const current = getMyBatches();
+    if (!current.some(item => item.id === batch.id)) {
+      current.push(batch);
+      localStorage.setItem("pm_enrolled", JSON.stringify(current));
+    }
 
-  if (study) {
+    renderBatches();
+    renderMyBatches();
+    event.target.textContent = "Added";
+  }
+});
 
-    const id = study.dataset.study;
+$("batchSearch").addEventListener("input", event => {
+  const term = event.target.value.toLowerCase();
+  renderBatches(allBatches.filter(batch =>
+    batch.title.toLowerCase().includes(term) ||
+    batch.description.toLowerCase().includes(term)
+  ));
+});
 
-    if (!id) {
+async function loadBatches() {
+  try {
+    const response = await fetch("/api/batches");
+    const data = await response.json();
 
-      alert("Batch ID nahi mili.");
+    if (!response.ok) throw new Error(data.error || "Batches error");
 
+    allBatches = data.batches || [];
+    renderBatches();
+    renderMyBatches();
+  } catch (error) {
+    $("batchList").textContent = error.message;
+  }
+}
+
+function addChatMessage(item) {
+  const row = document.createElement("div");
+  row.className = "chat-item";
+
+  const name = document.createElement("strong");
+  name.textContent = item.username || "Student";
+
+  const message = document.createElement("div");
+  message.textContent = item.message || "";
+
+  const time = document.createElement("small");
+  time.textContent = item.created_at
+    ? new Date(item.created_at).toLocaleString()
+    : "";
+
+  row.append(name, message, time);
+  $("chatMessages").appendChild(row);
+  $("chatMessages").scrollTop = $("chatMessages").scrollHeight;
+}
+
+async function setupCommunity() {
+  try {
+    const configResponse = await fetch("/api/config");
+    const config = await configResponse.json();
+
+    if (!config.supabaseUrl || !config.supabaseKey) {
+      $("chatStatus").textContent = "Supabase environment variables configure nahi hain.";
       return;
     }
 
-    window.location.href =
-      `/api/study/${encodeURIComponent(id)}`;
-
-  }
-
-  /* ENROLL BUTTON */
-
-  if (enroll) {
-
-    const id = String(enroll.dataset.enroll);
-
-    const list = getEnrolled();
-
-    if (!list.includes(id)) {
-
-      list.push(id);
-
-    }
-
-    saveEnrolled(list);
-
-    renderBatches();
-
-    renderMyBatches();
-
-  }
-
-});
-
-/* =========================================
-   SEARCH
-========================================= */
-
-$("#search").addEventListener(
-  "input",
-  renderBatches
-);
-
-/* =========================================
-   LOAD BATCHES FROM API
-========================================= */
-
-async function loadBatches() {
-
-  try {
-
-    $("#batchList").innerHTML = `
-      <p class="muted">
-        Loading batches...
-      </p>
-    `;
-
-    const response = await fetch("/api/batches");
-
-    const data = await response.json();
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error || "Batches load nahi hue."
-      );
-
-    }
-
-    batches = data.batches || [];
-
-    renderBatches();
-
-  } catch (error) {
-
-    console.error(error);
-
-    $("#batchList").innerHTML = `
-      <p class="muted">
-        ${safe(error.message)}
-      </p>
-    `;
-
-  }
-
-}
-
-loadBatches();
-
-/* =========================================
-   ACCOUNT / USERNAME
-========================================= */
-
-$("#username").value = localStorage.getItem(
-  usernameKey
-) || "";
-
-$("#saveAccount").addEventListener("click", () => {
-
-  const username = $("#username")
-    .value
-    .trim()
-    .slice(0, 24);
-
-  if (!username) {
-
-    $("#accountStatus").textContent =
-      "Pehle username likhein.";
-
-    return;
-  }
-
-  localStorage.setItem(
-    usernameKey,
-    username
-  );
-
-  $("#accountStatus").textContent =
-    `Username saved: ${username}`;
-
-});
-
-/* =========================================
-   COMMUNITY CHAT
-========================================= */
-
-const socket = io();
-
-function addMessage(item) {
-
-  const div = document.createElement("div");
-
-  div.className = "bubble";
-
-  const username = document.createElement("span");
-
-  username.className = "who";
-
-  username.textContent =
-    item.username || "Student";
-
-  const message = document.createElement("span");
-
-  message.textContent =
-    item.message || "";
-
-  const time = document.createElement("span");
-
-  time.className = "when";
-
-  time.textContent = item.time
-    ? new Date(item.time).toLocaleString()
-    : "";
-
-  div.append(
-    username,
-    message,
-    time
-  );
-
-  $("#messages").append(div);
-
-  $("#messages").scrollTop =
-    $("#messages").scrollHeight;
-
-}
-
-/* Previous messages */
-
-socket.on("chat-history", items => {
-
-  $("#messages").innerHTML = "";
-
-  (items || []).forEach(addMessage);
-
-});
-
-/* New messages */
-
-socket.on("chat-message", item => {
-
-  addMessage(item);
-
-});
-
-/* Send message */
-
-$("#chatForm").addEventListener("submit", event => {
-
-  event.preventDefault();
-
-  const message = $("#chatInput")
-    .value
-    .trim();
-
-  if (!message) return;
-
-  const username = getUsername();
-
-  socket.emit("chat-message", {
-    username,
-    message
-  });
-
-  $("#chatInput").value = "";
-
-});
-
-/* =========================================
-   AI DOUBTS CHAT
-========================================= */
-
-function addAI(message, type = "bot") {
-
-  const div = document.createElement("div");
-
-  div.className = `bubble ${type}`;
-
-  div.textContent = message;
-
-  $("#aiMessages").append(div);
-
-  $("#aiMessages").scrollTop =
-    $("#aiMessages").scrollHeight;
-
-}
-
-$("#aiForm").addEventListener(
-  "submit",
-  async event => {
-
-    event.preventDefault();
-
-    const message = $("#aiInput")
-      .value
-      .trim();
-
-    if (!message) return;
-
-    addAI(message, "user");
-
-    $("#aiInput").value = "";
-
-    const loading = document.createElement("div");
-
-    loading.className = "bubble bot";
-
-    loading.textContent = "Thinking...";
-
-    $("#aiMessages").append(loading);
-
-    try {
-
-      const response = await fetch("/api/ai", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
+    supabaseClient = window.supabase.createClient(
+      config.supabaseUrl,
+      config.supabaseKey
+    );
+
+    const { data, error } = await supabaseClient
+      .from("community_messages")
+      .select("id, username, message, created_at")
+      .order("created_at", { ascending: true })
+      .limit(100);
+
+    if (error) throw error;
+
+    $("chatMessages").innerHTML = "";
+    data.forEach(addChatMessage);
+
+    supabaseClient
+      .channel("community-live")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "community_messages"
         },
-
-        body: JSON.stringify({
-          message
-        })
-
+        payload => addChatMessage(payload.new)
+      )
+      .subscribe(status => {
+        $("chatStatus").textContent =
+          status === "SUBSCRIBED" ? "Connected" : "Connecting...";
       });
 
-      const data = await response.json();
-
-      loading.remove();
-
-      addAI(
-        data.reply ||
-        data.error ||
-        "Response nahi mila."
-      );
-
-    } catch (error) {
-
-      loading.remove();
-
-      addAI(
-        "Connection error. Thodi der baad try karein."
-      );
-
-    }
-
+  } catch (error) {
+    console.error(error);
+    $("chatStatus").textContent =
+      "Community connect nahi hua. Supabase settings check karein.";
   }
-);
+}
 
+$("chatForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const message = $("chatInput").value.trim();
+  const username = getUsername() || "Student";
+
+  if (!message || !supabaseClient) return;
+
+  $("chatInput").value = "";
+
+  const { error } = await supabaseClient
+    .from("community_messages")
+    .insert({ username, message });
+
+  if (error) {
+    $("chatStatus").textContent = "Message send nahi hua.";
+    console.error(error);
+  }
+});
+
+function addAiBubble(text, type) {
+  const bubble = document.createElement("div");
+  bubble.className = `bubble ${type}`;
+  bubble.textContent = text;
+  $("aiMessages").appendChild(bubble);
+  $("aiMessages").scrollTop = $("aiMessages").scrollHeight;
+}
+
+$("aiForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const message = $("aiInput").value.trim();
+  if (!message) return;
+
+  $("aiInput").value = "";
+  addAiBubble(message, "user");
+
+  const loading = document.createElement("div");
+  loading.className = "bubble bot";
+  loading.textContent = "Thinking...";
+  $("aiMessages").appendChild(loading);
+
+  try {
+    const response = await fetch("/api/ai", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await response.json();
+    loading.textContent = data.reply || data.error || "Answer nahi mila.";
+  } catch {
+    loading.textContent = "AI se connection nahi ho paaya.";
+  }
+});
+
+loadBatches();
+setupCommunity();
