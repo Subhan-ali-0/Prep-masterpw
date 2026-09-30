@@ -1,0 +1,418 @@
+
+/* =================================
+   PREP MASTER - WHITE THEME
+================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #171717;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: 100px;
+}
+
+/* HEADER */
+
+.topbar {
+  height: 130px;
+  margin: 25px 25px 30px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 30px;
+  position: relative;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 32px;
+  color: #111111;
+}
+
+.brand img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.icon-btn {
+  border: 0;
+  background: transparent;
+  color: #111111;
+  font-size: 38px;
+  cursor: pointer;
+}
+
+/* THREE DOT MENU */
+
+.menu {
+  position: absolute;
+  z-index: 5;
+  right: 15px;
+  top: 90px;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  min-width: 190px;
+  padding: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.menu a,
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  color: #171717;
+  background: none;
+  border: 0;
+  text-align: left;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.menu a:hover,
+.menu button:hover {
+  background: #f2f2f2;
+}
+
+/* COMMON */
+
+.hidden {
+  display: none !important;
+}
+
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 0 25px;
+}
+
+.page h2 {
+  font-size: 27px;
+  color: #171717;
+}
+
+.muted {
+  color: #777777;
+  line-height: 1.5;
+}
+
+/* SEARCH */
+
+.search {
+  width: 100%;
+  height: 75px;
+  background: #f6f6f6;
+  border: 1px solid #e1e1e1;
+  border-radius: 14px;
+  color: #111111;
+  font-size: 21px;
+  padding: 0 25px;
+  margin-bottom: 45px;
+  outline: none;
+}
+
+.search:focus {
+  border-color: #07835f;
+}
+
+/* BATCHES */
+
+.batch-list {
+  display: grid;
+  gap: 25px;
+}
+
+.batch-card {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 17px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+}
+
+.batch-image {
+  width: 100%;
+  height: 290px;
+  object-fit: cover;
+  background: #f0f0f0;
+  display: block;
+}
+
+.batch-image.placeholder {
+  display: grid;
+  place-items: center;
+  color: #888888;
+  font-size: 22px;
+}
+
+.batch-info {
+  padding: 25px;
+}
+
+.batch-info h3 {
+  font-size: 26px;
+  line-height: 1.4;
+  margin: 0 0 30px;
+  color: #171717;
+}
+
+/* BUTTONS */
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+.actions button {
+  height: 65px;
+  border-radius: 12px;
+  border: 1px solid #dddddd;
+  background: #f7f7f7;
+  color: #171717;
+  font-size: 19px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actions .enroll {
+  background: #07835f;
+  border-color: #07835f;
+  color: #ffffff;
+}
+
+.actions button:active {
+  opacity: 0.8;
+}
+
+/* BOTTOM NAVIGATION */
+
+.bottom-nav {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -3px 15px rgba(0,0,0,0.05);
+}
+
+.bottom-nav button {
+  border: 0;
+  background: none;
+  color: #777777;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.bottom-nav button span {
+  font-size: 25px;
+}
+
+.bottom-nav button.active {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+/* COMMUNITY */
+
+.chat-panel {
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.messages {
+  height: 55vh;
+  min-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px;
+  background: #ffffff;
+}
+
+.bubble {
+  background: #f0f0f0;
+  color: #171717;
+  padding: 12px 14px;
+  border-radius: 12px;
+  max-width: 85%;
+  overflow-wrap: anywhere;
+}
+
+.bubble .who {
+  display: block;
+  color: #07835f;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.bubble .when {
+  display: block;
+  color: #888888;
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+/* CHAT INPUT */
+
+.chat-form {
+  display: flex;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.chat-form input,
+.account-card input {
+  min-width: 0;
+  flex: 1;
+  background: #f6f6f6;
+  border: 1px solid #dddddd;
+  color: #171717;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 16px;
+  outline: none;
+}
+
+.chat-form input:focus,
+.account-card input:focus {
+  border-color: #07835f;
+}
+
+.primary {
+  background: #07835f;
+  border: 0;
+  border-radius: 10px;
+  color: #ffffff;
+  padding: 0 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ACCOUNT */
+
+.account-card {
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 14px;
+  padding: 20px;
+  display: grid;
+  gap: 13px;
+}
+
+.account-card label {
+  color: #222222;
+}
+
+.account-card .primary {
+  height: 48px;
+}
+
+/* AI CHAT */
+
+.ai-messages {
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+}
+
+.ai-messages .bubble {
+  max-width: 100%;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 600px) {
+
+  body {
+    padding-bottom: 85px;
+  }
+
+  .topbar {
+    margin: 15px 12px 22px;
+    height: 90px;
+    padding: 15px;
+  }
+
+  .brand {
+    font-size: 25px;
+    gap: 10px;
+  }
+
+  .brand img {
+    width: 45px;
+    height: 45px;
+  }
+
+  main {
+    padding: 0 12px;
+  }
+
+  .search {
+    height: 60px;
+    margin-bottom: 30px;
+    font-size: 17px;
+  }
+
+  .batch-image {
+    height: 210px;
+  }
+
+  .batch-info {
+    padding: 18px;
+  }
+
+  .batch-info h3 {
+    font-size: 21px;
+    margin-bottom: 23px;
+  }
+
+  .actions button {
+    height: 57px;
+    font-size: 17px;
+  }
+
+  .bottom-nav {
+    height: 82px;
+  }
+
+  .bottom-nav button {
+    font-size: 11px;
+  }
+
+  .bottom-nav button span {
+    font-size: 22px;
+  }
+
+  .messages {
+    height: 52vh;
+  }
+}
