@@ -1,418 +1,244 @@
-
-/* =================================
-   PREP MASTER - WHITE THEME
-================================= */
-
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background: #ffffff;
+  font-family: Arial, sans-serif;
   color: #171717;
-  font-family: Arial, Helvetica, sans-serif;
-  padding-bottom: 100px;
+  background: #fff;
+  padding-bottom: 78px;
 }
 
-/* HEADER */
-
 .topbar {
-  height: 130px;
-  margin: 25px 25px 30px;
-  background: #ffffff;
-  border: 1px solid #eeeeee;
+  height: 62px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 25px 30px;
-  position: relative;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  padding: 0 16px;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 5;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 15px;
-  font-size: 32px;
-  color: #111111;
+  gap: 10px;
+  font-size: 18px;
 }
 
-.brand img {
-  width: 58px;
-  height: 58px;
-  object-fit: contain;
-  border-radius: 50%;
+.logo {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: #111;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
 }
 
-.icon-btn {
+.menu-btn {
   border: 0;
-  background: transparent;
-  color: #111111;
-  font-size: 38px;
+  background: white;
+  font-size: 28px;
   cursor: pointer;
 }
-
-/* THREE DOT MENU */
 
 .menu {
   position: absolute;
-  z-index: 5;
-  right: 15px;
-  top: 90px;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 12px;
-  min-width: 190px;
+  right: 12px;
+  top: 55px;
+  background: white;
+  border: 1px solid #eee;
+  box-shadow: 0 5px 20px #0001;
+  border-radius: 10px;
+  min-width: 160px;
   padding: 8px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
 }
 
-.menu a,
-.menu button {
+.menu a {
   display: block;
-  width: 100%;
-  padding: 14px;
-  color: #171717;
-  background: none;
-  border: 0;
-  text-align: left;
+  padding: 11px;
+  color: #222;
   text-decoration: none;
-  font-size: 16px;
-  border-radius: 7px;
-  cursor: pointer;
 }
 
-.menu a:hover,
-.menu button:hover {
-  background: #f2f2f2;
+.menu a:hover {
+  background: #f5f5f5;
 }
 
-/* COMMON */
+main {
+  max-width: 1050px;
+  margin: auto;
+  padding: 18px 15px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 8px 0 18px;
+}
 
 .hidden {
   display: none !important;
 }
 
-main {
-  max-width: 900px;
-  margin: auto;
-  padding: 0 25px;
-}
-
-.page h2 {
-  font-size: 27px;
-  color: #171717;
-}
-
-.muted {
-  color: #777777;
-  line-height: 1.5;
-}
-
-/* SEARCH */
-
 .search {
   width: 100%;
-  height: 75px;
-  background: #f6f6f6;
-  border: 1px solid #e1e1e1;
-  border-radius: 14px;
-  color: #111111;
-  font-size: 21px;
-  padding: 0 25px;
-  margin-bottom: 45px;
-  outline: none;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  margin-bottom: 16px;
 }
 
-.search:focus {
-  border-color: #07835f;
-}
-
-/* BATCHES */
-
-.batch-list {
+.batch-grid {
   display: grid;
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 15px;
 }
 
 .batch-card {
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: 17px;
+  border: 1px solid #eee;
+  border-radius: 13px;
   overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+  background: white;
 }
 
-.batch-image {
+.batch-card img {
   width: 100%;
-  height: 290px;
+  height: 145px;
   object-fit: cover;
-  background: #f0f0f0;
-  display: block;
-}
-
-.batch-image.placeholder {
-  display: grid;
-  place-items: center;
-  color: #888888;
-  font-size: 22px;
+  background: #f1f1f1;
 }
 
 .batch-info {
-  padding: 25px;
+  padding: 13px;
 }
 
 .batch-info h3 {
-  font-size: 26px;
-  line-height: 1.4;
-  margin: 0 0 30px;
-  color: #171717;
+  margin: 0 0 7px;
+  font-size: 17px;
 }
 
-/* BUTTONS */
+.batch-info p {
+  color: #666;
+  font-size: 13px;
+  min-height: 30px;
+}
 
 .actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 13px;
+  display: flex;
+  gap: 8px;
 }
 
-.actions button {
-  height: 65px;
-  border-radius: 12px;
-  border: 1px solid #dddddd;
-  background: #f7f7f7;
-  color: #171717;
-  font-size: 19px;
-  font-weight: 600;
+button {
   cursor: pointer;
 }
 
-.actions .enroll {
-  background: #07835f;
-  border-color: #07835f;
-  color: #ffffff;
+.actions button,
+.primary-btn,
+.chat-form button {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 13px;
+  background: #111;
+  color: white;
 }
 
-.actions button:active {
-  opacity: 0.8;
+.actions .secondary {
+  background: #eee;
+  color: #111;
 }
-
-/* BOTTOM NAVIGATION */
 
 .bottom-nav {
   position: fixed;
-  z-index: 10;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 90px;
-  background: #ffffff;
-  border-top: 1px solid #e5e5e5;
+  z-index: 10;
+  background: white;
+  border-top: 1px solid #eaeaea;
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  box-shadow: 0 -3px 15px rgba(0,0,0,0.05);
+  padding: 8px 3px;
 }
 
 .bottom-nav button {
   border: 0;
-  background: none;
-  color: #777777;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.bottom-nav button span {
-  font-size: 25px;
+  background: transparent;
+  color: #666;
+  font-size: 11px;
+  padding: 8px 4px;
 }
 
 .bottom-nav button.active {
-  color: #2196f3;
+  color: #111;
   font-weight: bold;
 }
 
-/* COMMUNITY */
-
-.chat-panel {
-  background: #ffffff;
-  border: 1px solid #e2e2e2;
-  border-radius: 14px;
-  padding: 14px;
-}
-
-.messages {
+.chat-messages,
+.ai-messages {
   height: 55vh;
-  min-height: 300px;
+  min-height: 280px;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 10px;
-  background: #ffffff;
-}
-
-.bubble {
-  background: #f0f0f0;
-  color: #171717;
-  padding: 12px 14px;
+  border: 1px solid #eee;
   border-radius: 12px;
-  max-width: 85%;
-  overflow-wrap: anywhere;
+  padding: 12px;
+  margin: 12px 0;
+  background: #fafafa;
 }
-
-.bubble .who {
-  display: block;
-  color: #07835f;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.bubble .when {
-  display: block;
-  color: #888888;
-  font-size: 11px;
-  margin-top: 6px;
-}
-
-/* CHAT INPUT */
 
 .chat-form {
   display: flex;
-  gap: 9px;
-  margin-top: 12px;
+  gap: 8px;
 }
 
-.chat-form input,
-.account-card input {
-  min-width: 0;
+.chat-form input {
   flex: 1;
-  background: #f6f6f6;
-  border: 1px solid #dddddd;
-  color: #171717;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+}
+
+.chat-item,
+.bubble {
+  background: white;
+  border: 1px solid #eee;
   border-radius: 10px;
-  padding: 14px;
-  font-size: 16px;
-  outline: none;
+  padding: 10px;
+  margin-bottom: 9px;
+  overflow-wrap: anywhere;
 }
 
-.chat-form input:focus,
-.account-card input:focus {
-  border-color: #07835f;
+.chat-item strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 5px;
 }
 
-.primary {
-  background: #07835f;
-  border: 0;
-  border-radius: 10px;
-  color: #ffffff;
-  padding: 0 20px;
-  font-size: 16px;
-  cursor: pointer;
+.chat-item small {
+  display: block;
+  color: #888;
+  font-size: 10px;
+  margin-top: 5px;
 }
 
-/* ACCOUNT */
-
-.account-card {
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 14px;
-  padding: 20px;
-  display: grid;
-  gap: 13px;
+.bubble.user {
+  background: #eaf2ff;
 }
 
-.account-card label {
-  color: #222222;
+.muted {
+  color: #777;
+  font-size: 13px;
 }
 
-.account-card .primary {
-  height: 48px;
-}
-
-/* AI CHAT */
-
-.ai-messages {
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 12px;
-}
-
-.ai-messages .bubble {
-  max-width: 100%;
-}
-
-/* MOBILE RESPONSIVE */
-
-@media (max-width: 600px) {
-
-  body {
-    padding-bottom: 85px;
-  }
-
-  .topbar {
-    margin: 15px 12px 22px;
-    height: 90px;
-    padding: 15px;
-  }
-
-  .brand {
-    font-size: 25px;
-    gap: 10px;
-  }
-
-  .brand img {
-    width: 45px;
-    height: 45px;
-  }
-
-  main {
-    padding: 0 12px;
-  }
-
-  .search {
-    height: 60px;
-    margin-bottom: 30px;
-    font-size: 17px;
-  }
-
-  .batch-image {
-    height: 210px;
-  }
-
-  .batch-info {
-    padding: 18px;
-  }
-
-  .batch-info h3 {
-    font-size: 21px;
-    margin-bottom: 23px;
-  }
-
-  .actions button {
-    height: 57px;
-    font-size: 17px;
-  }
-
-  .bottom-nav {
-    height: 82px;
-  }
-
+@media (max-width: 420px) {
   .bottom-nav button {
-    font-size: 11px;
-  }
-
-  .bottom-nav button span {
-    font-size: 22px;
-  }
-
-  .messages {
-    height: 52vh;
+    font-size: 10px;
   }
 }
